@@ -50,15 +50,15 @@ jobs:
       - name: sast scan
       
     #break the build?
-    continue-on-error: true
+      #  continue-on-error: true
         
-        env:
-          VERACODE_API_KEY_ID: ${{ secrets.VERACODE_API_ID }}
-          VERACODE_API_KEY_SECRET: ${{ secrets.VERACODE_API_KEY }}
+      #  env:
+      #    VERACODE_API_KEY_ID: ${{ secrets.VERACODE_API_ID }}
+      #    VERACODE_API_KEY_SECRET: ${{ secrets.VERACODE_API_KEY }}
           
-        run: |
+        run: | 
           ./veracode static scan ./target/verademo.war --summary-output sast-summary.txt
-          cat sast-summary.txt
+      #    cat sast-summary.txt
       
       - name: upload sast artifact
         uses: actions/upload-artifact@main
