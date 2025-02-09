@@ -2,7 +2,6 @@ name: veracode-demo
 
 on:
   workflow_dispatch:
-  # Uncomment the following lines to enable scheduled runs
   #schedule:
   #- cron: "4 5 * * *"
 
@@ -34,11 +33,11 @@ jobs:
           find . -name verademo.war
           find . -name *zip
 
-    #  - name: save artifact
-    #    uses: actions/upload-artifact@v4
-    #   with:
-    #      name: scan-target
-    #     path: ./app/target/verademo.war
+      - name: save artifact
+        uses: actions/upload-artifact@main
+        with:
+            name: scan-target
+            path: ./target/verademo.war
 
       - name: setup veracode
         run: |
@@ -51,8 +50,7 @@ jobs:
       - name: sast scan
       
     #break the build?
-    
-        continue-on-error: true
+    continue-on-error: true
         
         env:
           VERACODE_API_KEY_ID: ${{ secrets.VERACODE_API_ID }}
@@ -74,10 +72,28 @@ jobs:
         working-directory: .
         run: |
           curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan --json=SCA-App-Issues.json --allow-dirty
-      - name: Upload SCA issues artifact
+          
+      - name: upload SCA issues artifact
         uses: actions/upload-artifact@v4
         with:
           name: SCA-App-Issues-${{ github.run_id }}
           path: "SCA-App-Issues.json"
 
-
+      - name: Get scan results
+        uses: actions/download-artifact@v3
+        with:
+          name: "Veracode Pipeline-Scan Results"
+          
+      - name: convert pipeline scan output to SARIF format
+        id: convert
+        uses: Veracode/veracode-pipeline-scan-results-to-sarif@v1.0.7
+        with:
+          results-json: filtered_results.json
+          output-results-sarif: veracode-results.sarif
+          source-base-path-1: "^com/veracode:src/main/java/com/veracode"
+          source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
+          repo_owner: OWNER
+          repo_name: REPO
+          commitSHA: 4b6472266afd7b471e86085a6659e8c7f2b119da
+          ref: refs/heads/master
+          githubToken: ${{ secrets.GTOKEN }}
