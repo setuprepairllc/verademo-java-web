@@ -23,16 +23,7 @@ jobs:
         
         run: |
           mvn clean package
-
-      - name: debug action
-        run: |
-          pwd
-          ls -al
-          whoami
-          find . -name pom.xml
-          find . -name verademo.war
-          find . -name *zip
-
+     
       - name: save artifact
         uses: actions/upload-artifact@main
         with:
@@ -73,7 +64,7 @@ jobs:
         run: |
           curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan --json=SCA-App-Issues.json --allow-dirty
           
-      - name: upload SCA issues artifact
+      - name: upload sca issues artifact
         uses: actions/upload-artifact@v4
         with:
           name: SCA-App-Issues-${{ github.run_id }}
@@ -83,10 +74,21 @@ jobs:
         uses: actions/download-artifact@main
         with:
           name: SAST-App-Issues-${{ github.run_id }}
+
+      - name: debug action
+        run: |
+           pwd
+           ls -al
+           whoami
+           find . -name pom.xml
+           find . -name verademo.war
+           find . -name *zip
+           find . -name *json
+
           
       - name: convert pipeline scan output to SARIF format
         id: convert
-        uses: Veracode/veracode-pipeline-scan-results-to-sarif@v1.0.7
+        uses: Veracode/veracode-pipeline-scan-results-to-sarif@main
         with:
           results-json: filtered_results.json
           output-results-sarif: veracode-results.sarif
@@ -100,4 +102,4 @@ jobs:
           
       - name: output sarif results
         run: |
-           cat filtered_results.json
+           cat veracode-results.sarif
