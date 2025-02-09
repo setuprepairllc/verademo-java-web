@@ -24,17 +24,8 @@ jobs:
         
         run: |
           mvn clean package
+          ls /app/target/
 
-      - name: save artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: scan-target
-          path: app/target/verademo.war
-          
-  sast-scan:
-    needs: checkout-and-package
-    runs-on: ubuntu-latest
-    steps:
       - name: debug1
         run: |
           pwd
@@ -43,7 +34,13 @@ jobs:
           find . -name pom.xml
           find . -name verademo.war
           find . -name *zip
-          
+
+      - name: save artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: scan-target
+          path: app/target/verademo.war
+
       - name: Setup Veracode
         run: |
           curl -fsS https://tools.veracode.com/veracode-cli/install | sh
@@ -64,18 +61,7 @@ jobs:
         with:
           name: SAST-App-Issues-${{ github.run_id }}
           path: "*.json"
-           
-  sca-scan:
-    needs: sast-scan
-    runs-on: ubuntu-latest
-    steps:
-      - name: debug1
-        run: |
-          pwd
-          ls -al
-          whoami
-          df -h
-          time
+          
       - name: SCA Scan
         env:
           SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
@@ -89,5 +75,3 @@ jobs:
         with:
           name: SCA-App-Issues-${{ github.run_id }}
           path: "SCA-App-Issues.json"
-
-
