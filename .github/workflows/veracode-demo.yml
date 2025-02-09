@@ -71,7 +71,7 @@ jobs:
           path: "SCA-App-Issues.json"
 
       - name: get scan results
-        uses: actions/download-artifact@v1.0.7
+        uses: actions/download-artifact@v1
         with:
           name: SAST-App-Issues-${{ github.run_id }}
 
@@ -88,7 +88,7 @@ jobs:
           
       - name: convert pipeline scan output to SARIF format
         id: convert
-        uses: Veracode/veracode-pipeline-scan-results-to-sarif@main
+        uses: Veracode/veracode-pipeline-scan-results-to-sarif@v1
         with:
           results-json: filtered_results.json
           output-results-sarif: veracode-results.sarif
