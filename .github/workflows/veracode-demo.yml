@@ -34,20 +34,21 @@ jobs:
     needs: checkout-and-package
     runs-on: ubuntu-latest
     steps:
+      - name: debug1
+        run: |
+          pwd
+          ls -al
+          whoami
+          find . -name pom.xml
+          find . -name verademo.war
+          find . -name *zip
+          
       - name: Setup Veracode
         run: |
           curl -fsS https://tools.veracode.com/veracode-cli/install | sh
       - name: Package App
         run: |
           ./veracode package -s . -a
-      - name: debug1
-        run: |
-          pwd
-          ls -al
-          whoami
-          df -h
-          find . -name verademo.war
-          find . -name *zip
       - name: SAST Scan
         continue-on-error: false
         env:
@@ -87,3 +88,5 @@ jobs:
         with:
           name: SCA-App-Issues-${{ github.run_id }}
           path: "SCA-App-Issues.json"
+
+
