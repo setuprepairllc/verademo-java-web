@@ -77,14 +77,8 @@ jobs:
 
       - name: debug action
         run: |
-           pwd;
-           ls -al;
-           whoami;
-           find . -name pom.xml;
-           find . -name verademo.war;
-           find . -name *.zip;
-           ls;
-           ls ./target/
+           ls
+
 
           
       - name: convert pipeline scan output to SARIF format
