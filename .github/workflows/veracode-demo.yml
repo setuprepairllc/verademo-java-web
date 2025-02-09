@@ -7,7 +7,7 @@ on:
   #- cron: "4 5 * * *"
 
 jobs:
-  checkout-and-package:
+  veracode-demo:
     runs-on: ubuntu-latest
 
     steps:
@@ -49,10 +49,15 @@ jobs:
           ./veracode package -s . -a
           
       - name: SAST Scan
+      
+    #break the build?
+    
         continue-on-error: true
+        
         env:
           VERACODE_API_KEY_ID: ${{ secrets.VERACODE_API_ID }}
           VERACODE_API_KEY_SECRET: ${{ secrets.VERACODE_API_KEY }}
+          
         run: |
           ./veracode static scan ./target/verademo.war --summary-output sast-summary.txt
           cat sast-summary.txt
@@ -66,10 +71,8 @@ jobs:
       - name: SCA Scan
         env:
           SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
-        working-directory: ./app
+        working-directory: .
         run: |
-          pwd
-          ls -al
           curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan --json=SCA-App-Issues.json
       - name: Upload SCA issues artifact
         uses: actions/upload-artifact@v4
