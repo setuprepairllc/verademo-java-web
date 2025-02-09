@@ -20,13 +20,12 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
     
-      - name: Build with Maven
+      - name: build with maven
         
         run: |
           mvn clean package
-          ls /app/target/
 
-      - name: debug1
+      - name: debugaction
         run: |
           pwd
           ls -al
