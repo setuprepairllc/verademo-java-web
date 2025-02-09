@@ -83,7 +83,8 @@ jobs:
            find . -name pom.xml;
            find . -name verademo.war;
            find . -name *.zip;
-           find . -name *.json;
+           ls;
+           ls ./target/
 
           
       - name: convert pipeline scan output to SARIF format
