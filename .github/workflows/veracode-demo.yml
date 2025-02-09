@@ -80,7 +80,7 @@ jobs:
           path: "SCA-App-Issues.json"
 
       - name: Get scan results
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@main
         with:
           name: "Veracode Pipeline-Scan Results"
           
