@@ -58,7 +58,7 @@ jobs:
           
         run: | 
           ./veracode static scan ./target/verademo.war --summary-output sast-summary.txt
-      #    cat sast-summary.txt
+          cat sast-summary.txt
       
       - name: upload sast artifact
         uses: actions/upload-artifact@main
@@ -79,10 +79,10 @@ jobs:
           name: SCA-App-Issues-${{ github.run_id }}
           path: "SCA-App-Issues.json"
 
-      - name: Get scan results
+      - name: get scan results
         uses: actions/download-artifact@main
         with:
-          name: "Veracode Pipeline-Scan Results"
+          name: SAST-App-Issues-${{ github.run_id }}
           
       - name: convert pipeline scan output to SARIF format
         id: convert
@@ -97,3 +97,7 @@ jobs:
           commitSHA: 4b6472266afd7b471e86085a6659e8c7f2b119da
           ref: refs/heads/master
           githubToken: ${{ secrets.GTOKEN }}
+          
+      - name: output sarif results
+        run: |
+           cat filtered_results.json
