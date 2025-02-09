@@ -77,13 +77,13 @@ jobs:
 
       - name: debug action
         run: |
-           pwd
-           ls -al
-           whoami
-           find . -name pom.xml
-           find . -name verademo.war
-           find . -name *zip
-           find . -name *json
+           pwd;
+           ls -al;
+           whoami;
+           find . -name pom.xml;
+           find . -name verademo.war;
+           find . -name *.zip;
+           find . -name *.json;
 
           
       - name: convert pipeline scan output to SARIF format
