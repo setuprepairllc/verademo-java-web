@@ -71,7 +71,7 @@ jobs:
           path: "SCA-App-Issues.json"
 
       - name: get scan results
-        uses: actions/download-artifact@v1.0.7  
+        uses: actions/download-artifact@v3
         with:
           name: SAST-App-Issues-${{ github.run_id }}
 
