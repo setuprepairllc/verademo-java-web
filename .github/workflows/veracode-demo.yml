@@ -84,20 +84,21 @@ jobs:
 
       - name: debug
         run: | 
-          ls
+          ls -al
           
       - uses: github/codeql-action/upload-sarif@v3
         with:
-       
-          sarif_file: veracode-results.sarif
+           sarif_file: veracode-results.sarif
                 
       - name: save filtered results file
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: filtered-results
           path: results.json
       
       - name: create fixes from static findings
+        continue-on-error: true
         uses: Veracode/veracode-fix@main
         with:
           inputFile: results.json
