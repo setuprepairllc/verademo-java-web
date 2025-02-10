@@ -77,7 +77,7 @@ jobs:
         with:
           results-json: results.json
           output-results-sarif: veracode-results.sarif
-          source-base-path-1: "^com/veracode:src/main/java/com/veracode"
+          source-base-path-1: "^com/veracode:src/main/java/com/"
           source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
           ref: refs/heads/main
           githubToken: ${{ secrets.GTOKEN }}
@@ -88,17 +88,16 @@ jobs:
           
       - uses: github/codeql-action/upload-sarif@v3
         with:
-        # Path to SARIF file relative to the root of the repository
+       
           sarif_file: veracode-results.sarif
                 
       - name: save filtered results file
         uses: actions/upload-artifact@v4
         with:
           name: filtered-results
-          path: filtered_results.json
+          path: results.json
       
       - name: create fixes from static findings
-        
         uses: Veracode/veracode-fix@main
         with:
           inputFile: results.json
