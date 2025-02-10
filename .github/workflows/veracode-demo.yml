@@ -78,9 +78,9 @@ jobs:
           results-json: filtered_results.json
           output-results-sarif: veracode-results.sarif
           source-base-path-1: "^com/veracode:src/main/java/com/veracode"
-          source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
-          ref: refs/heads/master
-          githubToken: ${{ secrets.GTOKEN }}
+          #source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
+          #ref: refs/heads/main
+          #githubToken: ${{ secrets.GTOKEN }}
 
       
       - name: upload sarif artifact
