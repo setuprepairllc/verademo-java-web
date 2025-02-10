@@ -20,15 +20,14 @@ jobs:
           java-version: '11'
     
       - name: build with maven
-        
         run: |
           mvn clean package
      
       - name: save artifact
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v4
         with:
-            name: scan-target
-            path: ./target/verademo.war
+          name: scan-target
+          path: ./target/verademo.war
 
       - name: setup veracode
         run: |
@@ -39,20 +38,16 @@ jobs:
           ./veracode package -s . -a
           
       - name: sast scan
-      
-    #break the build?
         continue-on-error: true
-        
         env:
           VERACODE_API_KEY_ID: ${{ secrets.VERACODE_API_ID }}
           VERACODE_API_KEY_SECRET: ${{ secrets.VERACODE_API_KEY }}
-          
         run: | 
           ./veracode static scan ./target/verademo.war --summary-output sast-summary.txt
           cat sast-summary.txt
       
       - name: upload sast artifact
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v4
         with:
           name: SAST-App-Issues-${{ github.run_id }}
           path: "*.json"
@@ -75,26 +70,6 @@ jobs:
         with:
           name: SAST-App-Issues-${{ github.run_id }}
 
-      - name: debug action
-        run: |
-           ls
-
 
           
-      - name: convert pipeline scan output to SARIF format
-        id: convert
-        uses: Veracode/veracode-pipeline-scan-results-to-sarif@v1.0.7
-        with:
-          results-json: filtered_results.json
-          output-results-sarif: veracode-results.sarif
-          source-base-path-1: "^com/veracode:src/main/java/com/veracode"
-          source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
-          repo_owner: OWNER
-          repo_name: REPO
-          commitSHA: 4b6472266afd7b471e86085a6659e8c7f2b119da
-          ref: refs/heads/master
-          githubToken: ${{ secrets.GTOKEN }}
-          
-      - name: output sarif results
-        run: |
-           cat veracode-results.sarif
+
