@@ -69,9 +69,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: SAST-App-Issues-${{ github.run_id }}
-
           
       - name: convert pipeline scan output to SARIF format
+        continue-on-error: true
         id: convert
         uses: Veracode/veracode-pipeline-scan-results-to-sarif@v2.0.2
         with:
@@ -81,6 +81,10 @@ jobs:
           source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
           #ref: refs/heads/main
           #githubToken: ${{ secrets.GTOKEN }}
+
+      - name: debug
+        run: | 
+          ls
           
       - uses: github/codeql-action/upload-sarif@v3
         with:
